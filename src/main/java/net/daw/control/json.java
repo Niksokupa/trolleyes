@@ -56,8 +56,8 @@ public class json extends HttpServlet {
 						TipousuarioService oService = new TipousuarioService(request);
 						try {
 							ReplyBean oReplyBean = oService.get();
-							strJson = "{\"status\":" + oReplyBean.getStatus() + ",\"message\":\"" + oReplyBean.getJson()
-									+ "\"}";
+							strJson = "{\"status\":" + oReplyBean.getStatus() + ",\"message\":" + oReplyBean.getJson()
+									+ "}";
 							
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
@@ -69,8 +69,8 @@ public class json extends HttpServlet {
 						TipousuarioService oService = new TipousuarioService(request);
 						try {
 							ReplyBean oReplyBean = oService.remove();
-							strJson = "{\"status\":" + oReplyBean.getStatus() + ",\"message\":\"" + oReplyBean.getJson()
-									+ "\"}";
+							strJson = "{\"status\":" + oReplyBean.getStatus() + ",\"message\":" + oReplyBean.getJson()
+									+ "}";
 							
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
