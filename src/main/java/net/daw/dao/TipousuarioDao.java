@@ -49,5 +49,23 @@ public class TipousuarioDao {
 		return oTipousuarioBean;
 
 	}
-
+        
+        public boolean remove(int id) throws Exception {
+            String strSQL = "DELETE FROM " + ob + " WHERE id=?";
+            boolean estado = false;
+            PreparedStatement oPreparedStatement =null;
+            try {
+                    oPreparedStatement = oConnection.prepareStatement(strSQL);
+                    oPreparedStatement.setInt(1, id);
+                    oPreparedStatement.execute();
+                    estado = true;
+		} catch (SQLException e) {
+			throw new Exception ("Error en Dao remove de tipousuario",e);
+		} finally {
+			if (oPreparedStatement!=null) {
+				oPreparedStatement.close();
+			}
+		}
+		return estado;
+        }
 }
