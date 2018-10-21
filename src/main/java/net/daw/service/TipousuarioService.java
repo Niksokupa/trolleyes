@@ -52,11 +52,15 @@ public class TipousuarioService {
 		ConnectionInterface oConnectionPool = null;
 		Connection oConnection ;
 		try {
+                        TipousuarioBean oTipousuarioBean;
 			Integer id = Integer.parseInt(oRequest.getParameter("id"));
 			oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
 			oConnection = oConnectionPool.newConnection();
 			TipousuarioDao oTipousuarioDao=new TipousuarioDao(oConnection);
-			boolean resultado = oTipousuarioDao.remove(id);
+                        oTipousuarioBean = new TipousuarioBean();
+                        oTipousuarioBean = oTipousuarioDao.get(id);
+                        
+			String resultado = oTipousuarioDao.remove(oTipousuarioBean);
 			Gson oGson = new Gson();
 			oReplyBean = new ReplyBean(200, oGson.toJson(resultado));
 		} catch (Exception ex) {
