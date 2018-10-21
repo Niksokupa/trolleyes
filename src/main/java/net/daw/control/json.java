@@ -39,8 +39,8 @@ public class json extends HttpServlet {
         // TODO Auto-generated method stub
 
         String strJson = "";
-        String strOb = request.getParameter("ob");
-        String strOp = request.getParameter("op");
+        String strOb = request.getParameter("ob").toLowerCase();
+        String strOp = request.getParameter("op").toLowerCase();
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -90,7 +90,30 @@ public class json extends HttpServlet {
                                 }
 
                                 break;
+                            case "create":
+                                TipousuarioService oServiceCreate = new TipousuarioService(request);
+                                try {
+                                    ReplyBean oReplyBean = oServiceCreate.create();
+                                    strJson = "{\"status\":" + oReplyBean.getStatus() + ",\"message\":" + oReplyBean.getJson()
+                                            + "}";
+                                } catch (Exception e) {
+                                    // TODO Auto-generated catch block
+                                    e.printStackTrace();
+                                }
 
+                                break;
+                            case "update":
+                                TipousuarioService oServiceUpdate = new TipousuarioService(request);
+                                try {
+                                    ReplyBean oReplyBean = oServiceUpdate.update();
+                                    strJson = "{\"status\":" + oReplyBean.getStatus() + ",\"message\":" + oReplyBean.getJson()
+                                            + "}";
+                                } catch (Exception e) {
+                                    // TODO Auto-generated catch block
+                                    e.printStackTrace();
+                                }
+
+                                break;
                             default:
                                 break;
                         }
