@@ -5,23 +5,23 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.sql.Date;
+import net.daw.bean.LineaBean;
 
-import net.daw.bean.TipousuarioBean;
-
-public class TipousuarioDao {
+public class LineaDao {
 
 	Connection oConnection;
 	String ob = null;
 
-	public TipousuarioDao(Connection oConnection, String ob) {
+	public LineaDao(Connection oConnection, String ob) {
 		super();
 		this.oConnection = oConnection;
 		this.ob = ob;
 	}
 
-	public TipousuarioBean get(int id) throws Exception {
+	public LineaBean get(int id) throws Exception {
 		String strSQL = "SELECT * FROM " + ob + " WHERE id=?";
-		TipousuarioBean oTipousuarioBean;
+		LineaBean oLineaBean;
 		ResultSet oResultSet = null;
 		PreparedStatement oPreparedStatement = null;
 		try {
@@ -29,11 +29,13 @@ public class TipousuarioDao {
 			oPreparedStatement.setInt(1, id);
 			oResultSet = oPreparedStatement.executeQuery();
 			if (oResultSet.next()) {
-				oTipousuarioBean = new TipousuarioBean();
-				oTipousuarioBean.setId(oResultSet.getInt("id"));
-				oTipousuarioBean.setDesc(oResultSet.getString("desc"));
+				oLineaBean = new LineaBean();
+				oLineaBean.setId(oResultSet.getInt("id"));
+				oLineaBean.setCantidad(oResultSet.getInt("cantidad"));
+                                oLineaBean.setId_producto(oResultSet.getInt("id_producto"));
+                                oLineaBean.setId_factura(oResultSet.getInt("id_factura"));
 			} else {
-				oTipousuarioBean = null;
+				oLineaBean = null;
 			}
 		} catch (SQLException e) {
 			throw new Exception("Error en Dao get de " + ob, e);
@@ -45,7 +47,7 @@ public class TipousuarioDao {
 				oPreparedStatement.close();
 			}
 		}
-		return oTipousuarioBean;
+		return oLineaBean;
 	}
 
 	public int remove(int id) throws Exception {
@@ -90,19 +92,22 @@ public class TipousuarioDao {
 		return res;
 	}
 
-	public TipousuarioBean create(TipousuarioBean oTipousuarioBean) throws Exception {
-		String strSQL = "INSERT INTO " + ob + " (`id`, `desc`) VALUES (NULL, ?); ";
+	public LineaBean create(LineaBean oLineaBean) throws Exception {
+		String strSQL = "INSERT INTO " + ob + " (`id`, `cantidad`, `id_producto`, `id_factura`) VALUES "
+                        + "(NULL, ?,?,?); ";
 		ResultSet oResultSet = null;
 		PreparedStatement oPreparedStatement = null;
 		try {
 			oPreparedStatement = oConnection.prepareStatement(strSQL);
-			oPreparedStatement.setString(1, oTipousuarioBean.getDesc());
+			oPreparedStatement.setInt(1, oLineaBean.getCantidad());
+                        oPreparedStatement.setInt(2, oLineaBean.getId_producto());
+                        oPreparedStatement.setInt(3, oLineaBean.getId_factura());
 			oPreparedStatement.executeUpdate();
 			oResultSet = oPreparedStatement.getGeneratedKeys();
 			if (oResultSet.next()) {
-				oTipousuarioBean.setId(oResultSet.getInt(1));
+				oLineaBean.setId(oResultSet.getInt(1));
 			} else {
-				oTipousuarioBean.setId(0);
+				oLineaBean.setId(0);
 			}
 		} catch (SQLException e) {
 			throw new Exception("Error en Dao create de " + ob, e);
@@ -114,18 +119,20 @@ public class TipousuarioDao {
 				oPreparedStatement.close();
 			}
 		}
-		return oTipousuarioBean;
+		return oLineaBean;
 	}
 
-	public int update(TipousuarioBean oTipousuarioBean) throws Exception {
+	public int update(LineaBean oLineaBean) throws Exception {
 		int iResult = 0;
-		String strSQL = "UPDATE " + ob + " SET desc = ? WHERE id = ?;";
+		String strSQL = "UPDATE " + ob + " SET cantidad = ?, id_producto = ?, id_factura = ? WHERE id = ?;";
 
 		PreparedStatement oPreparedStatement = null;
 		try {
 			oPreparedStatement = oConnection.prepareStatement(strSQL);
-			oPreparedStatement.setString(1, oTipousuarioBean.getDesc());
-			oPreparedStatement.setInt(2, oTipousuarioBean.getId());
+			oPreparedStatement.setInt(1, oLineaBean.getCantidad());
+			oPreparedStatement.setInt(2, oLineaBean.getId_producto());
+                        oPreparedStatement.setInt(3, oLineaBean.getId_factura());
+                        oPreparedStatement.setInt(4, oLineaBean.getId());
 			iResult = oPreparedStatement.executeUpdate();
 
 		} catch (SQLException e) {
@@ -138,9 +145,9 @@ public class TipousuarioDao {
 		return iResult;
 	}
 
-	public ArrayList<TipousuarioBean> getpage(int iRpp, int iPage) throws Exception {
-		String strSQL = "SELECT * FROM `tipousuario` ";
-		ArrayList<TipousuarioBean> alTipousuarioBean;
+	public ArrayList<LineaBean> getpage(int iRpp, int iPage) throws Exception {
+		String strSQL = "SELECT * FROM " + ob;
+		ArrayList<LineaBean> alLineaBean;
 		if (iRpp > 0 && iRpp < 100000 && iPage > 0 && iPage < 100000000) {
 			strSQL += " LIMIT " + (iPage - 1) * iRpp + ", " + iRpp;
 			ResultSet oResultSet = null;
@@ -148,12 +155,14 @@ public class TipousuarioDao {
 			try {
 				oPreparedStatement = oConnection.prepareStatement(strSQL);
 				oResultSet = oPreparedStatement.executeQuery();
-				alTipousuarioBean = new ArrayList<TipousuarioBean>();
+				alLineaBean = new ArrayList<LineaBean>();
 				while (oResultSet.next()) {
-					TipousuarioBean oTipousuarioBean = new TipousuarioBean();
-					oTipousuarioBean.setId(oResultSet.getInt("id"));
-					oTipousuarioBean.setDesc(oResultSet.getString("desc"));
-					alTipousuarioBean.add(oTipousuarioBean);
+					LineaBean oLineaBean = new LineaBean();
+					oLineaBean.setId(oResultSet.getInt("id"));
+					oLineaBean.setCantidad(oResultSet.getInt("cantidad"));
+                                        oLineaBean.setId_producto(oResultSet.getInt("id_producto"));
+                                        oLineaBean.setId_factura(oResultSet.getInt("id_factura"));
+					alLineaBean.add(oLineaBean);
 				}
 			} catch (SQLException e) {
 				throw new Exception("Error en Dao getpage de " + ob, e);
@@ -168,7 +177,7 @@ public class TipousuarioDao {
 		} else {
 			throw new Exception("Error en Dao getpage de " + ob);
 		}
-		return alTipousuarioBean;
+		return alLineaBean;
 
 	}
 

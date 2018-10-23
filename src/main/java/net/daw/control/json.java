@@ -114,6 +114,17 @@ public class json extends HttpServlet {
                                 }
 
                                 break;
+                            case "getpage":
+                                TipousuarioService oServiceGetPage = new TipousuarioService(request);
+                                try {
+                                    ReplyBean oReplyBean = oServiceGetPage.getpage();
+                                    strJson = "{\"status\":" + oReplyBean.getStatus() + ",\"message\":" + oReplyBean.getJson()
+                                            + "}";
+                                } catch (Exception e) {
+                                    // TODO Auto-generated catch block
+                                    e.printStackTrace();
+                                }
+                                break;
                             default:
                                 break;
                         }

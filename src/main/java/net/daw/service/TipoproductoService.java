@@ -8,19 +8,19 @@ import javax.servlet.http.HttpServletRequest;
 import com.google.gson.Gson;
 
 import net.daw.bean.ReplyBean;
-import net.daw.bean.TipousuarioBean;
+import net.daw.bean.TipoproductoBean;
 import net.daw.connection.publicinterface.ConnectionInterface;
 import net.daw.constant.ConnectionConstants;
-import net.daw.dao.TipousuarioDao;
+import net.daw.dao.TipoproductoDao;
 import net.daw.factory.ConnectionFactory;
 import net.daw.helper.EncodingHelper;
 
-public class TipousuarioService {
+public class TipoproductoService {
 
 	HttpServletRequest oRequest;
 	String ob = null;
 
-	public TipousuarioService(HttpServletRequest oRequest) {
+	public TipoproductoService(HttpServletRequest oRequest) {
 		super();
 		this.oRequest = oRequest;
 		ob = oRequest.getParameter("ob");
@@ -34,10 +34,10 @@ public class TipousuarioService {
 			Integer id = Integer.parseInt(oRequest.getParameter("id"));
 			oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
 			oConnection = oConnectionPool.newConnection();
-			TipousuarioDao oTipousuarioDao = new TipousuarioDao(oConnection, ob);
-			TipousuarioBean oTipousuarioBean = oTipousuarioDao.get(id);
+			TipoproductoDao oTipoproductoDao = new TipoproductoDao(oConnection, ob);
+			TipoproductoBean oTipoproductoBean = oTipoproductoDao.get(id);
 			Gson oGson = new Gson();
-			oReplyBean = new ReplyBean(200, oGson.toJson(oTipousuarioBean));
+			oReplyBean = new ReplyBean(200, oGson.toJson(oTipoproductoBean));
 		} catch (Exception ex) {
 			oReplyBean = new ReplyBean(500,
 					"ERROR: " + EncodingHelper.escapeQuotes(EncodingHelper.escapeLine(ex.getMessage())));
@@ -57,8 +57,8 @@ public class TipousuarioService {
 			Integer id = Integer.parseInt(oRequest.getParameter("id"));
 			oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
 			oConnection = oConnectionPool.newConnection();
-			TipousuarioDao oTipousuarioDao = new TipousuarioDao(oConnection, ob);
-			int iRes = oTipousuarioDao.remove(id);
+			TipoproductoDao oTipoproductoDao = new TipoproductoDao(oConnection, ob);
+			int iRes = oTipoproductoDao.remove(id);
 			oReplyBean = new ReplyBean(200, Integer.toString(iRes));
 		} catch (Exception ex) {
 			oReplyBean = new ReplyBean(500,
@@ -77,8 +77,8 @@ public class TipousuarioService {
 		try {
 			oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
 			oConnection = oConnectionPool.newConnection();
-			TipousuarioDao oTipousuarioDao = new TipousuarioDao(oConnection, ob);
-			int registros = oTipousuarioDao.getcount();
+			TipoproductoDao oTipoproductoDao = new TipoproductoDao(oConnection, ob);
+			int registros = oTipoproductoDao.getcount();
 			Gson oGson = new Gson();
 			oReplyBean = new ReplyBean(200, oGson.toJson(registros));
 		} catch (Exception ex) {
@@ -99,13 +99,13 @@ public class TipousuarioService {
 		try {
 			String strJsonFromClient = oRequest.getParameter("json");
 			Gson oGson = new Gson();
-			TipousuarioBean oTipousuarioBean = new TipousuarioBean();
-			oTipousuarioBean = oGson.fromJson(strJsonFromClient, TipousuarioBean.class);
+			TipoproductoBean oTipoproductoBean = new TipoproductoBean();
+			oTipoproductoBean = oGson.fromJson(strJsonFromClient, TipoproductoBean.class);
 			oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
 			oConnection = oConnectionPool.newConnection();
-			TipousuarioDao oTipousuarioDao = new TipousuarioDao(oConnection, ob);
-			oTipousuarioBean = oTipousuarioDao.create(oTipousuarioBean);
-			oReplyBean = new ReplyBean(200, oGson.toJson(oTipousuarioBean));
+			TipoproductoDao oTipoproductoDao = new TipoproductoDao(oConnection, ob);
+			oTipoproductoBean = oTipoproductoDao.create(oTipoproductoBean);
+			oReplyBean = new ReplyBean(200, oGson.toJson(oTipoproductoBean));
 		} catch (Exception ex) {
 			oReplyBean = new ReplyBean(500,
 					"ERROR: " + EncodingHelper.escapeQuotes(EncodingHelper.escapeLine(ex.getMessage())));
@@ -123,12 +123,12 @@ public class TipousuarioService {
 		try {
 			String strJsonFromClient = oRequest.getParameter("json");
 			Gson oGson = new Gson();
-			TipousuarioBean oTipousuarioBean = new TipousuarioBean();
-			oTipousuarioBean = oGson.fromJson(strJsonFromClient, TipousuarioBean.class);
+			TipoproductoBean oTipoproductoBean = new TipoproductoBean();
+			oTipoproductoBean = oGson.fromJson(strJsonFromClient, TipoproductoBean.class);
 			oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
 			oConnection = oConnectionPool.newConnection();
-			TipousuarioDao oTipousuarioDao = new TipousuarioDao(oConnection, ob);
-			iRes = oTipousuarioDao.update(oTipousuarioBean);
+			TipoproductoDao oTipoproductoDao = new TipoproductoDao(oConnection, ob);
+			iRes = oTipoproductoDao.update(oTipoproductoBean);
 			oReplyBean.setStatus(200);
 			oReplyBean.setJson(Integer.toString(iRes));
 		} catch (Exception ex) {
@@ -149,10 +149,10 @@ public class TipousuarioService {
 			Integer iPage = Integer.parseInt(oRequest.getParameter("page"));
 			oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
 			oConnection = oConnectionPool.newConnection();
-			TipousuarioDao oTipousuarioDao = new TipousuarioDao(oConnection, ob);
-			ArrayList<TipousuarioBean> alTipousuarioBean = oTipousuarioDao.getpage(iRpp, iPage);
+			TipoproductoDao oTipoproductoDao = new TipoproductoDao(oConnection, ob);
+			ArrayList<TipoproductoBean> alTipoproductoBean = oTipoproductoDao.getpage(iRpp, iPage);
 			Gson oGson = new Gson();
-			oReplyBean = new ReplyBean(200, oGson.toJson(alTipousuarioBean));
+			oReplyBean = new ReplyBean(200, oGson.toJson(alTipoproductoBean));
 		} catch (Exception ex) {
 			oReplyBean = new ReplyBean(500,
 					"ERROR: " + EncodingHelper.escapeQuotes(EncodingHelper.escapeLine(ex.getMessage())));
